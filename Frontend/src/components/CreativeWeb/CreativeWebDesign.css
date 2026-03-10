@@ -1,0 +1,34 @@
+.creative-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 15px;
+  text-align: center;
+}
+
+.creative-text {
+  margin-bottom: 5px;
+  font-weight: 300;
+  color: #f1e9e9;
+  font-size: clamp(0.75rem, 1vw, 1.5rem);
+}
+
+.creative-title {
+  font-weight: bold;
+  font-size: clamp(1rem, 1.6vw, 1.4rem);
+}
+
+.creative-main{
+    color: #efef0d;
+}
+
+.creative-web{
+    font-weight: 300;
+    color: #9ca3af;
+}
+
+.creative-design{
+    font-weight: 300;
+    color: #fc730a;
+}

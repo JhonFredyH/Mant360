@@ -1,0 +1,56 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.footer h1 {
+  font-family: var(--font-title);
+  font-size: clamp(28px, 4vw, 32px);
+  font-weight: 700;
+  color: var(--color-white);
+  margin: 0 0 10px 0;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.footer h1 span {
+  font-family: var(--font-title);
+  font-size: clamp(28px, 4vw, 32px);
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 0 0 10px 0;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.social{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.social  img {
+  width: 100px;
+  height: 100px;
+  margin: 0 5px;
+}
+
+.social img:hover{
+    transform: scale(1.1);
+}
+
+.line{
+    width: 80%;
+    height: 1px;
+    background: var( --color-accent-2);
+    margin: 25px 0;
+}
+
+.fullLogo{
+    width: 200px;
+    height: auto;
+}

@@ -1,0 +1,32 @@
+.service-card{
+  background: #16263a;
+  padding:10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease; 
+}
+
+
+/* icon */
+.service-card span{
+  font-size: 40px;
+  color: #ff9f1c;
+}
+
+/* title */
+.service-card p{
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #7fa0c2;
+  
+}
+
+
+.service-card .value{
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-left:150px;
+}

@@ -1,0 +1,83 @@
+.container{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 5px 5%;
+  background: var(--color-background);
+  
+}
+
+.container-img img{
+  width:800px;
+  height: auto;
+  object-fit: cover;
+}
+
+
+.certifications img{
+  width:20px;
+  height: auto;
+  margin-right: 20px;
+}
+
+.certifications{
+    display: flex;
+    align-items: center; 
+    justify-content: center;   
+    gap:30px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+}
+.certifications .iso{
+    display: flex;
+    align-items: center;    
+    gap: 5px;
+    font-size:0.9rem;
+    color: var( --color-accent);
+    margin-bottom: 20px;    
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #F5A623;
+    border: 2px solid #F5A623;
+    background: rgba(245,166,35,0.08);
+    font-family: var(--font-title);
+    font-weight: 600;
+    letter-spacing: 3px;
+    box-shadow: 0 0 12px rgba(245,166,35,0.15);
+    transition: all 0.3s ease;
+}
+
+.container-text h1 {
+  font-size: 2.5rem;
+  color: var(--color-white);
+  font-family: var(--font-body);
+}
+
+.container-text h1 span{
+  display: block;
+  margin-top: 10px;
+  font-size: 2.5rem;
+  font-family: var(--font-body);
+  color: var( --color-accent);
+
+}
+
+.container-text .text{
+  margin: 20px 0;
+  font-size: 1.2rem;
+  color: var( --color-white);
+  text-align: justify;
+  leter-spacing: 0.5rem;
+}
+
+
+
+.services{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 35px;
+  width: 95%;
+  margin: 10px auto; 
+  padding-left: 30px; 
+}
+
