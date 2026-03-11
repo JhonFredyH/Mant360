@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Syne:wght@400..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
+
 
 *{
   margin:0;
@@ -19,6 +22,11 @@ html{
   --color-accent-2:#FFC107;     /* Amarillo industrial */
   --color-white:#FFFFFF;
   --color-background:#14181e;
+  --color-surface: #14181d;
+  --color-panel: #1b2028;
+  --color-border: #2a3040;
+  --color-text-muted: #8aa3c1;
+  
 
   /* TIPOGRAFIA */
   --font-title:"Syne", sans-serif;

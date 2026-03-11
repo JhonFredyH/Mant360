@@ -5,7 +5,7 @@ export const NAV_ITEMS = [
   { id: "projects", label: "Projects", href: "/#projects" },
   { id: "testimonial", label: "Testimonials", href: "/#testimonial" },
   { id: "contact", label: "Contact", href: "/#contact" },
-  { id: "login", label: "Login", href: "/#login", isButton: true },
+  { id: "login", label: "Login", href: "/login", isButton: true },
   
 ];
 
