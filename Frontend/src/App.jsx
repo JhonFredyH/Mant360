@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProjectRoute";
 import Dashboard from "./pages/Dashboard";
+import Plants from "./pages/Plants";
 
 function App() {
   return (
@@ -16,6 +17,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/plants"
+          element={
+            <ProtectedRoute>
+              <Plants />
             </ProtectedRoute>
           }
         />

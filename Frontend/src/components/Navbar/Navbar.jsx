@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import { NAV_ITEMS } from "../../data/navItems";
+import {NAVBAR_ITEMS } from "../../data/dataItems";
 
 const Navbar = () => {
   return (
@@ -9,7 +9,7 @@ const Navbar = () => {
       </a>
 
       <ul>
-        {NAV_ITEMS.map((item) => (
+        {NAVBAR_ITEMS.map((item) => (
            <li key={item.id}>
             {item.isButton ? (
               <a href={item.href} className="nav-btn">
