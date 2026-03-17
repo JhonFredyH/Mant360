@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SIDEBAR_ITEMS } from "../data/dataItems";
 import Plants from "./Plants";
+import WorkOrders from "./WorkOrders";
+
 import "./Dashboard.css";
 
-// Dashboard //
 export default function Dashboard() {
   const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("overview");
@@ -40,6 +41,10 @@ export default function Dashboard() {
     switch (activeNav) {
       case "plants":
         return <Plants />;
+      case "workorders":
+        return <WorkOrders />;
+      case "assets":
+        return <Assets />;
       default:
         return (
           <div className="coming-soon">
@@ -47,7 +52,7 @@ export default function Dashboard() {
               {SIDEBAR_ITEMS.find((n) => n.id === activeNav)?.icon}
             </span>
             <h2>{SIDEBAR_ITEMS.find((n) => n.id === activeNav)?.label}</h2>
-            <p>Selecciona una opción del menú.</p>
+            <p>Módulo en desarrollo.</p>
           </div>
         );
     }
@@ -55,7 +60,7 @@ export default function Dashboard() {
 
   return (
     <div className={`dash-root${loaded ? " loaded" : ""}`}>
-      {/* ── Sidebar ── */}
+      {/* Sidebar */}
       <aside className={`sidebar${sidebarOpen ? " open" : " closed"}`}>
         <div className="sidebar-header">
           <div className="brand">
@@ -106,7 +111,7 @@ export default function Dashboard() {
         </div>
       </aside>
 
-      {/* ── Main ── */}
+      {/* Main */}
       <main className="dash-main">
         <header className="topbar">
           <div className="topbar-left">

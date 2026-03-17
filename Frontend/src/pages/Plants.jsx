@@ -111,9 +111,9 @@ function TreeNode({
     return () => document.removeEventListener("mousedown", handler);
   }, [showTools]);
 
-  useEffect(() => {
-    if (searchQuery) setOpen(true);
-  }, [searchQuery]);
+  // Derivado: si hay búsqueda activa el nodo siempre se muestra expandido
+  const isForceOpen = Boolean(searchQuery);
+  const effectiveOpen = isForceOpen || open;
 
   const matchesSelf = searchQuery
     ? node.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -153,8 +153,9 @@ function TreeNode({
           if (hasChildren) setOpen((p) => !p);
           setShowTools(false);
         }}
+
       >
-        <span className={`arrow ${hasChildren || adding ? (open ? "open" : "") : "invisible"}`}>
+        <span className={`arrow ${hasChildren || adding ? (effectiveOpen ? "open" : "") : "invisible"}`}>
           <svg width="10" height="10" viewBox="0 0 10 10">
             <path d="M3 2l4 3-4 3" stroke="currentColor" strokeWidth="1.5"
               fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -249,7 +250,7 @@ function TreeNode({
         </div>
       )}
 
-      {open && hasChildren && (
+      {effectiveOpen && hasChildren && (
         <div className="tree-children">
           {node.children.map((child) => (
             <TreeNode
@@ -270,11 +271,228 @@ function TreeNode({
   );
 }
 
+
+/* Mock data helpers */
+const MOCK_SUBCOMPONENTS = [
+  { icon: "settings", name: "Sistema de lubricación",   model: "LUB-200-A" },
+  { icon: "bolt",     name: "Motor principal",          model: "MTR-500-HP" },
+  { icon: "thermostat", name: "Sistema de enfriamiento", model: "COOL-X90"  },
+  { icon: "hub",      name: "Panel de control",         model: "PLC-S7-300" },
+];
+
+const MOCK_HISTORY = [
+  { icon: "build",       title: "Cambio de rodamientos",      by: "Carlos R. (Técnico)",  date: "Feb 28, 2026", wo: "WO-10234" },
+  { icon: "cleaning_services", title: "Limpieza general",     by: "PM Schedule",          date: "Ene 15, 2026", wo: "WO-10189" },
+  { icon: "report_problem",    title: "Falla en sensor temp", by: "María G. (Lead)",      date: "Dic 03, 2025", wo: "WO-10041" },
+];
+
+const MOCK_DOCS = [
+  { icon: "picture_as_pdf", name: "Manual_Servicio_V2.pdf" },
+  { icon: "description",    name: "Ficha_Tecnica.docx"     },
+  { icon: "schema",         name: "Diagrama_Electrico.dwg" },
+];
+
+/* QR simple SVG (patrón decorativo) */
+function QRPlaceholder() {
+  return (
+    <div className="qr-box">
+      <div className="qr-inner">
+        <span className="material-icons-outlined qr-icon">qr_code_2</span>
+      </div>
+      <p className="qr-label">SCAN TO IDENTIFY ASSET</p>
+    </div>
+  );
+}
+
+
+const COMPONENT_ICON = {
+  sensor:     "sensors",
+  motor:      "bolt",
+  brazo:      "precision_manufacturing",
+  tarjeta:    "memory",
+  boquilla:   "radio_button_checked",
+  bomba:      "water",
+  valvula:    "valve",
+  filtro:     "filter_alt",
+  compresor:  "compress",
+  panel:      "dashboard",
+  cable:      "cable",
+  default:    "settings",
+};
+
+const getComponentIcon = (label = "") => {
+  const l = label.toLowerCase();
+  if (l.includes("sensor"))    return COMPONENT_ICON.sensor;
+  if (l.includes("motor"))     return COMPONENT_ICON.motor;
+  if (l.includes("brazo"))     return COMPONENT_ICON.brazo;
+  if (l.includes("tarjeta"))   return COMPONENT_ICON.tarjeta;
+  if (l.includes("boquilla"))  return COMPONENT_ICON.boquilla;
+  if (l.includes("bomba"))     return COMPONENT_ICON.bomba;
+  if (l.includes("valvula") || l.includes("válvula")) return COMPONENT_ICON.valvula;
+  if (l.includes("filtro"))    return COMPONENT_ICON.filtro;
+  if (l.includes("compresor")) return COMPONENT_ICON.compresor;
+  if (l.includes("panel"))     return COMPONENT_ICON.panel;
+  if (l.includes("cable"))     return COMPONENT_ICON.cable;
+  return COMPONENT_ICON.default;
+};
+
+/* Asset Detail Panel */
+function AssetDetail({ node }) {
+  const [photoHover, setPhotoHover] = useState(false);
+  const [photoSrc, setPhotoSrc]     = useState(null);
+  const fileRef                     = useRef();
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setPhotoSrc(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="ad-root">
+      <div className="ad-two-col">
+
+        {/* Izquierda: foto + subcomponentes + ver más */}
+        <div className="ad-left">
+          <div
+            className={`ad-photo${photoHover ? " hovered" : ""}`}
+            style={photoSrc ? { backgroundImage: `url(${photoSrc})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}
+            onMouseEnter={() => setPhotoHover(true)}
+            onMouseLeave={() => setPhotoHover(false)}
+            onClick={() => fileRef.current.click()}
+          >
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            {!photoSrc && (
+              <>
+                <span className="material-icons-outlined ad-photo-icon">add_photo_alternate</span>
+                <span className="ad-photo-label">{photoHover ? "Add photo" : "No image"}</span>
+              </>
+            )}
+            {photoSrc && photoHover && (
+              <div className="ad-photo-overlay">
+                <span className="material-icons-outlined" style={{ fontSize: 28, color: "#fff" }}>edit</span>
+                <span className="ad-photo-overlay-label">Change photo</span>
+              </div>
+            )}
+          </div>
+          <div className="ad-subcomp-section">
+            <p className="ad-section-title">SUB-COMPONENTS</p>
+            <div className="ad-subgrid">
+              {node.children && node.children.length > 0 ? (
+                node.children.map((child) => (
+                  <div className="ad-subitem" key={child.id}>
+                    <div className="ad-subitem-icon">
+                      <span className="material-icons-outlined" style={{ fontSize: 18 }}>
+                        {getComponentIcon(child.label)}
+                      </span>
+                    </div>
+                    <div className="ad-subitem-info">
+                      <span className="ad-subitem-name">{child.label}</span>
+                      <span className="ad-subitem-model">{child.id}</span>
+                    </div>
+                    <span className="material-icons-outlined ad-subitem-arrow">chevron_right</span>
+                  </div>
+                ))
+              ) : (
+                <div className="ad-subitem-empty">
+                  <span className="material-icons-outlined" style={{ fontSize: 20, color: "#2e3748" }}>inbox</span>
+                  <span>Sin componentes registrados</span>
+                </div>
+              )}
+            </div>
+            <div className="ad-ver-mas-row">
+              <button className="ad-ver-mas-btn">Ver más</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Derecha: health + botones + QR */}
+        <div className="ad-right">
+          <div className="ad-asset-header">
+            <div className="ad-asset-header-top">
+              <span className={`ad-asset-header-type color--${node.type}`}>{node.type}</span>
+              <span className="ad-status-badge ad-status--active">
+                <span className="ad-status-dot" />Active
+              </span>
+            </div>
+            <h2 className={`ad-asset-header-name color--${node.type}`}>{node.label}</h2>
+            <span className="ad-asset-id">{node.id}</span>
+          </div>
+          <div className="ad-health-card">
+            <div className="ad-health-head">
+              <p className="ad-section-title">ASSET HEALTH</p>
+              <span className="ad-health-badge">EXCELLENT</span>
+            </div>
+            <div className="ad-stat-row">
+              <span className="ad-stat-label">MTBF Index</span>
+              <span className="ad-stat-value">94%</span>
+            </div>
+            <div className="ad-progress-bar">
+              <div className="ad-progress-fill" style={{ width: "94%" }} />
+            </div>
+            <div className="ad-metrics">
+              <div className="ad-metric">
+                <span className="ad-metric-label">Availability</span>
+                <span className="ad-metric-value">99.2%</span>
+              </div>
+              <div className="ad-metric">
+                <span className="ad-metric-label">Efficiency</span>
+                <span className="ad-metric-value">87.5%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="ad-action-btns">
+            <button className="ad-action-btn ad-action-btn--blue">
+              <span className="material-icons-outlined" style={{ fontSize: 20 }}>add_circle_outline</span>
+              <span>New Work Order</span>
+            </button>
+            <button className="ad-action-btn ad-action-btn--amber">
+              <span className="material-icons-outlined" style={{ fontSize: 20 }}>history</span>
+              <span>Maintenance History</span>
+            </button>
+            <button className="ad-action-btn ad-action-btn--teal">
+              <span className="material-icons-outlined" style={{ fontSize: 20 }}>folder_open</span>
+              <span>Documentation</span>
+            </button>
+          </div>
+
+          <div className="ad-qr-box">
+            <div className="ad-qr-inner">
+              <span className="material-icons-outlined ad-qr-icon">qr_code_2</span>
+            </div>
+            <p className="ad-qr-label">SCAN TO IDENTIFY ASSET</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 export default function Plants() {
   const [tree, setTree]               = useState([]);
   const [selectedId, setSelectedId]   = useState(null);
   const [addingRoot, setAddingRoot]   = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const findNode = (list, id) => {
+    for (const n of list) {
+      if (n.id === id) return n;
+      const found = findNode(n.children, id);
+      if (found) return found;
+    }
+    return null;
+  };
+  const activeNode = findNode(tree, selectedId);
 
   const addNode = useCallback((parentId, type, label) => {
     const node = { id: genId(type), type, label, children: [] };
@@ -375,10 +593,14 @@ export default function Plants() {
       </div>
 
       <div className="plants-panel panel--right">
-        <div className="panel-empty">
-          <span className="material-icons-outlined empty-icon">touch_app</span>
-          <p>Selecciona un activo</p>
-        </div>
+        {activeNode && activeNode.type === "equipo" ? (
+          <AssetDetail node={activeNode} />
+        ) : (
+          <div className="panel-empty">
+            <span className="material-icons-outlined empty-icon">touch_app</span>
+            <p>Selecciona un equipo</p>
+          </div>
+        )}
       </div>
     </div>
   );

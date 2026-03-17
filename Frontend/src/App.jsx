@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProjectRoute";
 import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
+import WorkOrders from "./pages/WorkOrders";
 
 function App() {
   return (
@@ -21,6 +22,14 @@ function App() {
           }
         />
         <Route
+          path="/work-orders"
+          element={
+            <ProtectedRoute>
+              <WorkOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/plants"
           element={
             <ProtectedRoute>
@@ -28,6 +37,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
